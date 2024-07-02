@@ -1,0 +1,413 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "[transfer_certificate_no]",
+ "creation": "2024-07-02 14:41:42.824456",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "transfer_certificate_request",
+  "transfer_certificate_request_no",
+  "transfer_certificate_request_date",
+  "reason_for_leaving",
+  "expected_date_of_leaving",
+  "column_break_5ozka",
+  "tcr_status",
+  "closure_remarks",
+  "transfer_certificate_no",
+  "transfer_certificate_date",
+  "student_information_section",
+  "admission_no",
+  "name_of_the_student",
+  "gender",
+  "udise_pen",
+  "name_of_father",
+  "column_break_06ozn",
+  "dob_figures",
+  "dob_words",
+  "nationality",
+  "category",
+  "name_of_mother",
+  "fks_academic_information_section",
+  "date_of_joining",
+  "ay_figures",
+  "ay_words",
+  "course_last_attended",
+  "conduct",
+  "column_break_vxvpc",
+  "subjects_studied",
+  "previous_school_information_section",
+  "previous_school_attended",
+  "column_break_jrqip",
+  "course_attended_in_the_previous_school",
+  "financial_imformation_section",
+  "fees_outstanding_from_the_student",
+  "fees",
+  "others",
+  "column_break_yyqdv",
+  "refunds_due_to_the_student",
+  "caution_deposit",
+  "advance_annual_fees",
+  "excess_fees_paid",
+  "net_total",
+  "section_break_lvtr0",
+  "clearance_for_issue_of__transfer_certificate",
+  "student_administration",
+  "finance",
+  "teachercoordinator",
+  "vice_principal",
+  "principal",
+  "column_break_rzca4",
+  "seat_retained",
+  "amended_from",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "transfer_certificate_request",
+   "fieldtype": "Section Break",
+   "label": "TRANSFER CERTIFICATE REQUEST"
+  },
+  {
+   "fieldname": "transfer_certificate_request_no",
+   "fieldtype": "Data",
+   "label": "Transfer Certificate Request No"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "transfer_certificate_request_date",
+   "fieldtype": "Date",
+   "label": "Transfer Certificate Request Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "reason_for_leaving",
+   "fieldtype": "Data",
+   "label": "Reason for Leaving"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "expected_date_of_leaving",
+   "fieldtype": "Date",
+   "label": "Expected Date of Leaving"
+  },
+  {
+   "fieldname": "column_break_5ozka",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "tcr_status",
+   "fieldtype": "Select",
+   "label": "TCR Status",
+   "options": "Received\nIn Process\nClosed"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "closure_remarks",
+   "fieldtype": "Data",
+   "label": "Closure Remarks"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "transfer_certificate_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Transfer Certificate No",
+   "unique": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "transfer_certificate_date",
+   "fieldtype": "Date",
+   "label": "Transfer Certificate Date"
+  },
+  {
+   "fieldname": "student_information_section",
+   "fieldtype": "Section Break",
+   "label": "STUDENT INFORMATION"
+  },
+  {
+   "fieldname": "admission_no",
+   "fieldtype": "Link",
+   "label": "Admission No",
+   "options": "Student"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "name_of_the_student",
+   "fieldtype": "Data",
+   "label": "Name of the Student"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "gender",
+   "fieldtype": "Data",
+   "label": "Gender"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "udise_pen",
+   "fieldtype": "Data",
+   "label": "UDISE PEN"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "name_of_father",
+   "fieldtype": "Data",
+   "label": "Name of Father"
+  },
+  {
+   "fieldname": "column_break_06ozn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "dob_figures",
+   "fieldtype": "Date",
+   "label": "Date of Birth - Figures"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "dob_words",
+   "fieldtype": "Data",
+   "label": "Date of Birth - Words"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "nationality",
+   "fieldtype": "Data",
+   "label": "Nationality"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "category",
+   "fieldtype": "Data",
+   "label": "Category"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "name_of_mother",
+   "fieldtype": "Data",
+   "label": "Name of Mother"
+  },
+  {
+   "fieldname": "fks_academic_information_section",
+   "fieldtype": "Section Break",
+   "label": "FKS ACADEMIC INFORMATION"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "date_of_joining",
+   "fieldtype": "Date",
+   "label": "Date of Joining"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "ay_figures",
+   "fieldtype": "Data",
+   "label": "Academic Year last attended in the School"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "ay_words",
+   "fieldtype": "Data",
+   "label": "Academic Year - In Words"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "course_last_attended",
+   "fieldtype": "Link",
+   "label": "Course last attended",
+   "options": "Program"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "conduct",
+   "fieldtype": "Data",
+   "label": "General Conduct of the Student"
+  },
+  {
+   "fieldname": "column_break_vxvpc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "subjects_studied",
+   "fieldtype": "Table",
+   "label": "Subjects Studied",
+   "options": "Program Enrollment Course"
+  },
+  {
+   "fieldname": "previous_school_information_section",
+   "fieldtype": "Section Break",
+   "label": "PREVIOUS SCHOOL INFORMATION"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "previous_school_attended",
+   "fieldtype": "Data",
+   "label": "Previous School attended"
+  },
+  {
+   "fieldname": "column_break_jrqip",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "course_attended_in_the_previous_school",
+   "fieldtype": "Link",
+   "label": "Course attended in the Previous School",
+   "options": "Program"
+  },
+  {
+   "fieldname": "financial_imformation_section",
+   "fieldtype": "Section Break",
+   "label": "FINANCIAL INFORMATION"
+  },
+  {
+   "fieldname": "fees_outstanding_from_the_student",
+   "fieldtype": "Heading",
+   "label": "Fees Outstanding from the student"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fees",
+   "fieldtype": "Float",
+   "label": "Fees"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "others",
+   "fieldtype": "Float",
+   "label": "Others"
+  },
+  {
+   "fieldname": "column_break_yyqdv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "refunds_due_to_the_student",
+   "fieldtype": "Heading",
+   "label": "Refunds Due to the Student"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "caution_deposit",
+   "fieldtype": "Float",
+   "label": "Caution Deposit"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "advance_annual_fees",
+   "fieldtype": "Float",
+   "label": "Advance Annual Fees"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "excess_fees_paid",
+   "fieldtype": "Float",
+   "label": "Excess Fees Paid"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "net_total",
+   "fieldtype": "Float",
+   "label": "Net Total"
+  },
+  {
+   "fieldname": "section_break_lvtr0",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "clearance_for_issue_of__transfer_certificate",
+   "fieldtype": "Heading",
+   "label": "CLEARANCE FOR ISSUE OF  TRANSFER CERTIFICATE"
+  },
+  {
+   "fieldname": "student_administration",
+   "fieldtype": "Data",
+   "label": "Student Administration"
+  },
+  {
+   "fieldname": "finance",
+   "fieldtype": "Data",
+   "label": "Finance"
+  },
+  {
+   "fieldname": "teachercoordinator",
+   "fieldtype": "Data",
+   "label": "Teacher/Coordinator"
+  },
+  {
+   "fieldname": "vice_principal",
+   "fieldtype": "Data",
+   "label": "Vice Principal"
+  },
+  {
+   "fieldname": "principal",
+   "fieldtype": "Data",
+   "label": "Principal"
+  },
+  {
+   "fieldname": "column_break_rzca4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "seat_retained",
+   "fieldtype": "Check",
+   "label": "Seat Retained"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Transfer Certificate Request",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Transfer Certificate Request",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-07-02 14:41:42.824456",
+ "modified_by": "Administrator",
+ "module": "Thirvusoft Bpm",
+ "name": "Transfer Certificate Request",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "transfer_certificate_no",
+ "track_changes": 1
+}
