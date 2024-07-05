@@ -10,7 +10,7 @@ def validate_wapp_enable(doc,event):
     if check == 0:
         frappe.throw('Kindly enable atleast one guardian for Whatsapp Message')
 
-@frappe.whitelist(allow_guest=True)
+
 def create_customer(doc,event):
     customer=frappe.new_doc("Customer")
     customer.customer_name=doc.first_name
