@@ -136,6 +136,7 @@ doc_events = {
 	},
     "Student": {
 	 	"validate": "thirvusoft_bpm.thirvusoft_bpm.custom.py.student.validate_wapp_enable",
+		"validate": "thirvusoft_bpm.thirvusoft_bpm.custom.py.student.create_customer",
 	},
 
     "Integration Request": {
