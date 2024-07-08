@@ -7,8 +7,8 @@ def validate_wapp_enable(doc,event):
         if i.enable_whatsapp_message == 1:
             check = 1
             break
-    if check == 0:
-        frappe.throw('Kindly enable atleast one guardian for Whatsapp Message')
+    # if check == 0:
+    #     frappe.throw('Kindly enable atleast one guardian for Whatsapp Message')
 
 
 
