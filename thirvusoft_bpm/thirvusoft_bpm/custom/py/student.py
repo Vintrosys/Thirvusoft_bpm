@@ -11,20 +11,6 @@ def validate_wapp_enable(doc,event):
         frappe.throw('Kindly enable atleast one guardian for Whatsapp Message')
 
 
-def create_customer(doc,event):
-    customer=frappe.new_doc("Customer")
-    customer.customer_name=doc.first_name
-    customer.customer_type="Individual"
-    customer.save()
-    address=frappe.new_doc("Address")
-    address.address_line1=doc.address_line_1
-    address.state=doc.city
-    address.city=doc.state
-    address.append("links",{
-        "link_doctype":"customer",
-        "link_name":customer.name,
-        "link_title":customer.customer_name
-    })
-    address.save()
+
     
     

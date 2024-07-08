@@ -10,7 +10,7 @@ def update_student_table(name):
             gd_doc.append("ts_students",
                 {
                     "student": student.parent,
-                    "student_name": frappe.db.get_value("Student", student.parent, "title"),
+                    "student_name": frappe.db.get_value("Student", student.parent, "student_name"),
                 }
             )
         # gd_doc.update({'ts_students':table_list})

@@ -135,7 +135,8 @@ doc_events = {
 		"on_submit": "thirvusoft_bpm.thirvusoft_bpm.custom.py.request_for_quotation.send_purchase_msg",
 	},
     "Student": {
-	 	"validate": ["thirvusoft_bpm.thirvusoft_bpm.custom.py.student.validate_wapp_enable", "thirvusoft_bpm.thirvusoft_bpm.custom.py.student.create_customer"]
+	 	"validate": ["thirvusoft_bpm.thirvusoft_bpm.custom.py.student.validate_wapp_enable" 
+                ]
 	},
 
     "Integration Request": {
