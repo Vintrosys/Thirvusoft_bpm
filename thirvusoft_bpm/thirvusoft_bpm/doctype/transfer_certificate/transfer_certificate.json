@@ -1,0 +1,173 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "[transfer_certificate_no]",
+ "creation": "2024-05-15 08:57:47.667231",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "transfer_certificate_no",
+  "transfer_certificate_date",
+  "adm_no",
+  "udise_permanent_education_number",
+  "name_of_the_student",
+  "gender",
+  "date_of_birth_as_per_admission_register",
+  "figures",
+  "words",
+  "nationality",
+  "category",
+  "name_of_father",
+  "name_of_mother",
+  "previous_school_attended",
+  "course_attended_in_the_previous_school",
+  "date_of_admission_to_the_school",
+  "academic_year_last_attended_in_the_school",
+  "course_last_attended",
+  "general_conduct_of_the_student",
+  "subjects_studied",
+  "section_break_ufa3o"
+ ],
+ "fields": [
+  {
+   "fieldname": "transfer_certificate_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Transfer Certificate No",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "transfer_certificate_date",
+   "fieldtype": "Date",
+   "label": "Transfer Certificate Date"
+  },
+  {
+   "fieldname": "adm_no",
+   "fieldtype": "Link",
+   "label": "Adm No",
+   "options": "Student"
+  },
+  {
+   "fieldname": "udise_permanent_education_number",
+   "fieldtype": "Data",
+   "label": "UDISE Permanent Education Number"
+  },
+  {
+   "fetch_from": "student.first_name",
+   "fetch_if_empty": 1,
+   "fieldname": "name_of_the_student",
+   "fieldtype": "Data",
+   "label": "Name of the Student"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Data",
+   "label": "Gender"
+  },
+  {
+   "fieldname": "date_of_birth_as_per_admission_register",
+   "fieldtype": "Section Break",
+   "label": "Date of Birth As Per Admission Register"
+  },
+  {
+   "fieldname": "figures",
+   "fieldtype": "Date",
+   "label": "Figures"
+  },
+  {
+   "fieldname": "words",
+   "fieldtype": "Data",
+   "label": "Words"
+  },
+  {
+   "fieldname": "nationality",
+   "fieldtype": "Data",
+   "label": "Nationality"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Data",
+   "label": "Category"
+  },
+  {
+   "fieldname": "name_of_father",
+   "fieldtype": "Data",
+   "label": "Name of Father"
+  },
+  {
+   "fieldname": "name_of_mother",
+   "fieldtype": "Data",
+   "label": "Name of Mother"
+  },
+  {
+   "fieldname": "previous_school_attended",
+   "fieldtype": "Data",
+   "label": "Previous School attended"
+  },
+  {
+   "fieldname": "course_attended_in_the_previous_school",
+   "fieldtype": "Link",
+   "label": "Course attended in the Previous School",
+   "options": "Program"
+  },
+  {
+   "fieldname": "date_of_admission_to_the_school",
+   "fieldtype": "Date",
+   "label": "Date of Admission to the School"
+  },
+  {
+   "fieldname": "academic_year_last_attended_in_the_school",
+   "fieldtype": "Data",
+   "label": "Academic Year last attended in the School"
+  },
+  {
+   "fieldname": "course_last_attended",
+   "fieldtype": "Link",
+   "label": "Course last attended",
+   "options": "Program"
+  },
+  {
+   "fieldname": "general_conduct_of_the_student",
+   "fieldtype": "Data",
+   "label": "General Conduct of the Student"
+  },
+  {
+   "fieldname": "subjects_studied",
+   "fieldtype": "Table",
+   "label": "Subjects Studied",
+   "options": "Program Enrollment Course"
+  },
+  {
+   "fieldname": "section_break_ufa3o",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-07-16 14:59:07.876372",
+ "modified_by": "Administrator",
+ "module": "Thirvusoft Bpm",
+ "name": "Transfer Certificate",
+ "name_case": "UPPER CASE",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "transfer_certificate_no",
+ "track_changes": 1
+}
