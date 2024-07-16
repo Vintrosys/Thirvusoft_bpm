@@ -1,0 +1,73 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-05-14 09:50:47.992705",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "is_previous_student_at_fks",
+  "prvious_school_attended",
+  "previous_admission_no",
+  "grade_qualified",
+  "date_of_admission_to_school",
+  "migration_certificate_no",
+  "transfer_certificate_no",
+  "tc_issued_date"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "is_previous_student_at_fks",
+   "fieldtype": "Check",
+   "label": "Is Previous Student at FKS"
+  },
+  {
+   "fieldname": "prvious_school_attended",
+   "fieldtype": "Data",
+   "label": "Prvious School Attended"
+  },
+  {
+   "fieldname": "previous_admission_no",
+   "fieldtype": "Data",
+   "label": "Previous Admission No"
+  },
+  {
+   "fieldname": "grade_qualified",
+   "fieldtype": "Link",
+   "label": "Grade Qualified",
+   "options": "Program"
+  },
+  {
+   "fieldname": "date_of_admission_to_school",
+   "fieldtype": "Date",
+   "label": "Date of Admission to School"
+  },
+  {
+   "fieldname": "migration_certificate_no",
+   "fieldtype": "Data",
+   "label": "Migration Certificate No"
+  },
+  {
+   "fieldname": "transfer_certificate_no",
+   "fieldtype": "Data",
+   "label": "Transfer Certificate No"
+  },
+  {
+   "fieldname": "tc_issued_date",
+   "fieldtype": "Date",
+   "label": "TC Issued Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-07-16 14:56:45.429227",
+ "modified_by": "Administrator",
+ "module": "Thirvusoft Bpm",
+ "name": "Student Logs",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

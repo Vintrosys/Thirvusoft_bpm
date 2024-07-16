@@ -1,0 +1,101 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:admission_no",
+ "creation": "2024-05-29 17:41:58.083408",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "bonafide_no",
+  "admission_no",
+  "student_name",
+  "name_of_the_father",
+  "name_of_the_mother",
+  "column_break_ehm7f",
+  "date_of_the_birth",
+  "date_of_joining",
+  "grade_from",
+  "grade_to"
+ ],
+ "fields": [
+  {
+   "fieldname": "bonafide_no",
+   "fieldtype": "Data",
+   "label": "Bonafide No"
+  },
+  {
+   "fieldname": "admission_no",
+   "fieldtype": "Link",
+   "label": "Admisison No",
+   "options": "Student",
+   "unique": 1
+  },
+  {
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "label": "Student Name"
+  },
+  {
+   "fieldname": "name_of_the_father",
+   "fieldtype": "Data",
+   "label": "Name of the Father"
+  },
+  {
+   "fieldname": "name_of_the_mother",
+   "fieldtype": "Data",
+   "label": "Name of the Mother"
+  },
+  {
+   "fieldname": "column_break_ehm7f",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_of_the_birth",
+   "fieldtype": "Date",
+   "label": "Date of the Birth"
+  },
+  {
+   "fieldname": "date_of_joining",
+   "fieldtype": "Date",
+   "label": "Date of Joining"
+  },
+  {
+   "fieldname": "grade_from",
+   "fieldtype": "Link",
+   "label": "Grade From",
+   "options": "Program"
+  },
+  {
+   "fieldname": "grade_to",
+   "fieldtype": "Link",
+   "label": "Grade To",
+   "options": "Program"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-07-16 14:58:25.979842",
+ "modified_by": "Administrator",
+ "module": "Thirvusoft Bpm",
+ "name": "Bonafide Certificate",
+ "name_case": "UPPER CASE",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
