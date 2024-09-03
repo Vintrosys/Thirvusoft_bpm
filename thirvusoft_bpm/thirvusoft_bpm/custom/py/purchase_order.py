@@ -1,7 +1,7 @@
 import frappe
 import re
 from urllib.parse import quote
-from frappe.core.doctype.communication.email import get_attach_link
+# from frappe.core.doctype.communication.email import get_attach_link
 import requests
 from frappe.utils.file_manager import save_file
 from frappe.utils.pdf import get_pdf
