@@ -35,7 +35,8 @@ doctype_js = {
 				"Fees" : "thirvusoft_bpm/custom/js/fees.js",
 				"Company" : "thirvusoft_bpm/custom/js/company.js",
 				"Guardian":"thirvusoft_bpm/custom/js/guardian.js",
-				"Payment Entry":"thirvusoft_bpm/custom/js/payment_entry.js"
+				"Payment Entry":"thirvusoft_bpm/custom/js/payment_entry.js",
+				"Sales Invoice": "thirvusoft_bpm/custom/js/sales_invoice.js"
 			}
 doctype_list_js = {"Fees" : "thirvusoft_bpm/custom/js/fees_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}

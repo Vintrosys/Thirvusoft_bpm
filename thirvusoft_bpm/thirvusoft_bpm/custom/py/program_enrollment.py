@@ -1,6 +1,6 @@
-from erpnext.education.doctype.program_enrollment_tool.program_enrollment_tool import ProgramEnrollmentTool
+from education.education.doctype.program_enrollment_tool.program_enrollment_tool import ProgramEnrollmentTool
 from frappe import _
-from erpnext.education.api import enroll_student
+from education.education.api import enroll_student
 
 import frappe
 class CustomEnrollment(ProgramEnrollmentTool):
