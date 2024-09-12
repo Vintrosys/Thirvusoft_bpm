@@ -89,12 +89,35 @@ def get_advance_entries(doc,event):
             doc.total_advance_payment += entry['debit']
             fees.total_advance_payment += entry['debit']
         fees.save()
+        invoice_doc = fees
+    elif doc.reference_doctype == 'Sales Invoice' and doc.reference_name:
+        invoice = frappe.get_doc('Sales Invoice',doc.reference_name)
+        gl_entry = frappe.get_all('GL Entry',{'debit':['>',0],'is_cancelled':0,'credit':0,'party_type':doc.party_type,'party':doc.party,'against_voucher':doc.reference_name,'voucher_no':['!=',doc.reference_name]},['account','debit'])
+        doc.advance_payments = []
+        doc.total_advance_payment = 0
+        invoice.advance_payments = []
+        invoice.total_advance_payment = 0
+        for entry in gl_entry:
+            doc.append('advance_payments',{
+                'account':entry['account'],
+                'amount':entry['debit']
+            })
+            invoice.append('advance_payments',{
+                'account':entry['account'],
+                'amount':entry['debit']
+            })
+            doc.total_advance_payment += entry['debit']
+            invoice.total_advance_payment += entry['debit']
+        invoice.save()
+        invoice_doc = invoice
 
+    
+    if doc.reference_doctype  in  ["Sales Invoice","Fees"]:
         #1.5 discount percentage
-        if doc.grand_total > 0 and frappe.db.get_value('Company',fees.company,'charges_applicable') and not doc.without_charges:
+        if doc.grand_total > 0 and frappe.db.get_value('Company',invoice_doc.company,'charges_applicable') and not doc.without_charges:
             doc.without_charges = doc.grand_total
-            doc.grand_total =  ( doc.without_charges * (frappe.db.get_value('Company',fees.company,'razorpay_charges')/100)) + doc.without_charges
-        elif doc.grand_total > 0 and not frappe.db.get_value('Company',fees.company,'charges_applicable') and doc.without_charges:
+            doc.grand_total =  ( doc.without_charges * (frappe.db.get_value('Company',invoice_doc.company,'razorpay_charges')/100)) + doc.without_charges
+        elif doc.grand_total > 0 and not frappe.db.get_value('Company',invoice_doc.company,'charges_applicable') and doc.without_charges:
             doc.grand_total =  doc.without_charges
         #Non Payment Message
         if doc.grand_total <= 0 and doc.payment_gateway_account:
