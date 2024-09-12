@@ -30,10 +30,9 @@ def create_payment_request(list_of_docs=None):
     if list_of_docs:
         for invoice in list_of_docs:
             invoice_doc = frappe.get_doc("Sales Invoice",invoice)
-            student_email = frappe.db.get_value("Student",{invoice_doc.customer},"student_email_id")
-            if (invoice_doc.name and student_email and invoice_doc.customer):
+            if (invoice_doc.name and invoice_doc.student_email and invoice_doc.customer):
                 doc= frappe.new_doc("Payment Request")
-                doc.update(make_payment_request(dt="Sales Invoice",dn=invoice_doc.name,party_type= "Customer",party= invoice_doc.customer,recipient_id= student_email))
+                doc.update(make_payment_request(dt="Sales Invoice",dn=invoice_doc.name,party_type= "Customer",party= invoice_doc.customer,recipient_id= invoice_doc.student_email))
                 doc.mode_of_payment = 'Gateway'
                 doc.payment_request_type = 'Inward'
                 doc.print_format = frappe.db.get_value(
