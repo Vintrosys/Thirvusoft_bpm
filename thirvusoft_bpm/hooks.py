@@ -38,7 +38,10 @@ doctype_js = {
 				"Payment Entry":"thirvusoft_bpm/custom/js/payment_entry.js",
 				"Sales Invoice": "thirvusoft_bpm/custom/js/sales_invoice.js"
 			}
-doctype_list_js = {"Fees" : "thirvusoft_bpm/custom/js/fees_list.js"}
+doctype_list_js = {
+	"Fees" : "thirvusoft_bpm/custom/js/fees_list.js",
+	"Sales Invoice":"thirvusoft_bpm/custom/js/sales_invoice_list.js"
+	}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
