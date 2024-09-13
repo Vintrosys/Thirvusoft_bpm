@@ -1,4 +1,31 @@
 frappe.listview_settings['Sales Invoice'] = {
+    	add_fields: [
+		"customer",
+		"customer_name",
+		"base_grand_total",
+		"outstanding_amount",
+		"due_date",
+		"company",
+		"currency",
+		"is_return",
+	],
+	get_indicator: function (doc) {
+		const status_colors = {
+			Draft: "grey",
+			Unpaid: "orange",
+			Paid: "green",
+			Return: "gray",
+			"Credit Note Issued": "gray",
+			"Unpaid and Discounted": "orange",
+			"Partly Paid and Discounted": "yellow",
+			"Overdue and Discounted": "red",
+			Overdue: "red",
+			"Partly Paid": "yellow",
+			"Internal Transfer": "darkgrey",
+		};
+		return [__(doc.status), status_colors[doc.status], "status,=," + doc.status];
+	},
+	right_column: "grand_total",
     onload: function(list_view) {
         list_view.page.add_actions_menu_item(__("Bulk Payment Request"), function() {
             const selected_docs = list_view.get_checked_items();
