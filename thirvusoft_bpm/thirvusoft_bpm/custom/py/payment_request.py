@@ -12,6 +12,11 @@ from frappe.utils.background_jobs import enqueue
 submit = False
 
 class CustomPaymentRequest(PaymentRequest):
+    def validate(self):
+        super().validate()
+        if self.reference_doctype == "Sales Invoice" and self.reference_name and self.is_new():
+            self.set_gateway_account()     
+
     def get_message(self):
         """return message with payment gateway link"""
         if self.party_type == 'Student':
@@ -20,6 +25,13 @@ class CustomPaymentRequest(PaymentRequest):
                 "payment_url": self.payment_url,
                 'student_balance':self.student_balance,
                 'virtual_account':frappe.get_value('Student',self.party,'virtual_account') or "--"
+            }
+        elif self.party_type == 'Customer':
+            context = {
+                "doc": frappe.get_doc(self.reference_doctype, self.reference_name),
+                "payment_url": self.payment_url,
+                'student_balance':self.student_balance,
+                'virtual_account':frappe.get_value(self.reference_doctype, self.reference_name,'virtual_account') or "--"
             }
         else:
             context = {
@@ -36,6 +48,10 @@ class CustomPaymentRequest(PaymentRequest):
             fees = frappe.db.get_value("Fees", {"name":self.reference_name}, "company")
             if fees:
                 default_mail=frappe.db.get_value("Company", {"name":fees}, "default_email")
+        if self.reference_doctype == "Sales Invoice" and self.reference_name:
+            invoice = frappe.db.get_value("Sales Invoice", {"name":self.reference_name}, "company")
+            if invoice:
+                default_mail=frappe.db.get_value("Company", {"name":invoice}, "default_email")
         if not self.bulk_transaction:
             args = {
             "recipients": self.email_to,
@@ -65,6 +81,13 @@ class CustomPaymentRequest(PaymentRequest):
             
         email_args = args
         enqueue(method=frappe.sendmail, queue="short", timeout=300, is_async=True, **email_args)
+
+    def set_gateway_account(self):
+        company = frappe.db.get_value(self.reference_doctype,self.reference_name,"company")
+        payment_gateway_aacount , payment_account , message = frappe.db.get_value("Payment Gateway Account",{"company":company},["name","payment_account","message"])
+        self.payment_gateway_account = payment_gateway_aacount
+        self.payment_account = payment_account 
+        self.message = message
 
 
 def get_advance_entries(doc,event):
