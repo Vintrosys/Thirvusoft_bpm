@@ -61,7 +61,7 @@ def create_payment_request(list_of_docs=None):
 def guardian_emails(student):
     concatenated_emails = ""
     enrollments = frappe.get_all("Program Enrollment",{"student":student},["name","program","creation"],order_by='creation desc',page_length=1)
-    emails = frappe.db.sql("""select email_address as student_emails 
+    emails = frappe.db.sql("""select g.email_address as student_emails 
             from `tabStudent` s ,
             `tabStudent Guardian` sg,
             `tabGuardian` g 
