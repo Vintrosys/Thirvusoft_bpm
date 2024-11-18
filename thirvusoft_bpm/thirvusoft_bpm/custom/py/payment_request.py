@@ -3,8 +3,10 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from urllib.parse import quote
-from erpnext.accounts.doctype.payment_request.payment_request import PaymentRequest
+from erpnext.accounts.doctype.payment_request.payment_request import (PaymentRequest , get_existing_payment_request_amount , get_amount )
 # from frappe.core.doctype.communication.email import get_attach_link
+from frappe import _
+from frappe.utils import flt, nowdate
 from frappe.utils.pdf import get_pdf
 from frappe.utils.file_manager import save_file
 from frappe.utils.background_jobs import enqueue
@@ -88,6 +90,21 @@ class CustomPaymentRequest(PaymentRequest):
         self.payment_gateway_account = payment_gateway_aacount
         self.payment_account = payment_account 
         self.message = message
+    def validate_payment_request_amount(self):
+        existing_payment_request_amount = flt(
+            get_existing_payment_request_amount(self.reference_doctype, self.reference_name)
+        )
+
+        ref_doc = frappe.get_doc(self.reference_doctype, self.reference_name)
+        if not hasattr(ref_doc, "order_type") or ref_doc.order_type != "Shopping Cart":
+            ref_amount = get_amount(ref_doc, self.payment_account)
+
+            if self.reference_doctype not in ["Sales Invoice","Fees"] and existing_payment_request_amount + flt(self.grand_total) > ref_amount:
+                frappe.throw(
+                    _("Total Payment Request amount cannot be greater than {0} amount").format(
+                        self.reference_doctype
+                    )
+                )    
 
 
 def get_advance_entries(doc,event):
