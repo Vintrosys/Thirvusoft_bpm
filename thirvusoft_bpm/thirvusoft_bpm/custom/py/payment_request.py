@@ -3,7 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from urllib.parse import quote
-from erpnext.accounts.doctype.payment_request.payment_request import (PaymentRequest , get_existing_payment_request_amount , get_amount )
+from erpnext.accounts.doctype.payment_request.payment_request import (
+    PaymentRequest , get_existing_payment_request_amount , get_amount , get_gateway_details,get_dummy_message,
+    )
+from erpnext.accounts.party import get_party_account, get_party_bank_account
+from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+	get_accounting_dimensions,
+)
 # from frappe.core.doctype.communication.email import get_attach_link
 from frappe import _
 from frappe.utils import flt, nowdate
@@ -82,6 +88,7 @@ class CustomPaymentRequest(PaymentRequest):
             }
             
         email_args = args
+        print("email_args",email_args)
         enqueue(method=frappe.sendmail, queue="short", timeout=300, is_async=True, **email_args)
 
     def set_gateway_account(self):
@@ -253,3 +260,103 @@ def whatsapp_message(doc):
                     log_doc.reference_name = doc.name
                     log_doc.insert()
                 frappe.delete_doc('File',pdf_url.name,ignore_permissions=True)
+
+
+
+@frappe.whitelist(allow_guest=True)
+def custom_make_payment_request(**args):
+    """Make payment request"""
+
+    args = frappe._dict(args)
+
+    ref_doc = frappe.get_doc(args.dt, args.dn)
+    gateway_account = get_gateway_details(args) or frappe._dict()
+
+    grand_total = get_amount(ref_doc, gateway_account.get("payment_account"))
+    if args.loyalty_points and args.dt == "Sales Order":
+        from erpnext.accounts.doctype.loyalty_program.loyalty_program import validate_loyalty_points
+
+        loyalty_amount = validate_loyalty_points(ref_doc, int(args.loyalty_points))
+        frappe.db.set_value(
+            "Sales Order", args.dn, "loyalty_points", int(args.loyalty_points), update_modified=False
+        )
+        frappe.db.set_value("Sales Order", args.dn, "loyalty_amount", loyalty_amount, update_modified=False)
+        grand_total = grand_total - loyalty_amount
+
+    bank_account = (
+        get_party_bank_account(args.get("party_type"), args.get("party")) if args.get("party_type") else ""
+    )
+
+    draft_payment_request = frappe.db.get_value(
+        "Payment Request",
+        {"reference_doctype": args.dt, "reference_name": args.dn, "docstatus": 0},
+    )
+
+    existing_payment_request_amount = get_existing_payment_request_amount(args.dt, args.dn)
+
+    if existing_payment_request_amount:
+        grand_total -= existing_payment_request_amount
+
+    if draft_payment_request:
+        frappe.db.set_value(
+            "Payment Request", draft_payment_request, "grand_total", grand_total, update_modified=False
+        )
+        pr = frappe.get_doc("Payment Request", draft_payment_request)
+    else:
+        pr = frappe.new_doc("Payment Request")
+        if args.get("dt") == "Sales Invoice":
+            args.recipient_id = ref_doc.student_email
+
+        if not args.get("payment_request_type"):
+            args["payment_request_type"] = (
+                "Outward" if args.get("dt") in ["Purchase Order", "Purchase Invoice"] else "Inward"
+            )
+
+        pr.update(
+            {
+                "payment_gateway_account": gateway_account.get("name"),
+                "payment_gateway": gateway_account.get("payment_gateway"),
+                "payment_account": gateway_account.get("payment_account"),
+                "payment_channel": gateway_account.get("payment_channel"),
+                "payment_request_type": args.get("payment_request_type"),
+                "currency": ref_doc.currency,
+                "grand_total": grand_total,
+                "mode_of_payment": args.mode_of_payment,
+                "email_to": args.recipient_id or ref_doc.owner,
+                "subject": _("Payment Request for {0}").format(args.dn),
+                "message": gateway_account.get("message") or get_dummy_message(ref_doc),
+                "reference_doctype": args.dt,
+                "reference_name": args.dn,
+                "party_type": args.get("party_type") or "Customer",
+                "party": args.get("party") or ref_doc.get("customer"),
+                "bank_account": bank_account,
+            }
+        )
+
+        # Update dimensions
+        pr.update(
+            {
+                "cost_center": ref_doc.get("cost_center"),
+                "project": ref_doc.get("project"),
+            }
+        )
+
+        for dimension in get_accounting_dimensions():
+            pr.update({dimension: ref_doc.get(dimension)})
+
+        if args.order_type == "Shopping Cart" or args.mute_email:
+            pr.flags.mute_email = True
+
+        pr.insert(ignore_permissions=True)
+        if args.submit_doc:
+            pr.submit()
+
+    if args.order_type == "Shopping Cart":
+        frappe.db.commit()
+        frappe.local.response["type"] = "redirect"
+        frappe.local.response["location"] = pr.get_payment_url()
+
+    if args.return_doc:
+        return pr
+
+    return pr.as_dict()                
