@@ -26,21 +26,16 @@ expected_keys = (
 
 
 def gets_context(context):
-	print("---------------------------------------------------->")
 	context.no_cache = 1
 	# Start
 	try:
 		doc = frappe.get_doc("Integration Request", frappe.form_dict["token"])
 		details = json.loads(doc.data)
-		print("details ======== ",details)
 		if(details['reference_doctype']=="Payment Request"):
 			pay_doc = frappe.db.get_value('Payment Request',details['reference_docname'],'reference_doctype')
-			print("pay_doc",pay_doc)
 			if pay_doc in ["Sales Invoice", "Fees"]:
 				fee_doc = frappe.db.get_value('Payment Request',details['reference_docname'],'reference_name')
-				print("fee_doc",fee_doc)
 				company = frappe.db.get_value(pay_doc,fee_doc,'company')
-				print("company",company)
 
 		if company:
 			context.api_key = get_api_key(company)

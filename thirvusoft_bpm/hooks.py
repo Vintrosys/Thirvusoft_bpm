@@ -180,7 +180,6 @@ doc_events = {
 # ------------------------------
 #
 override_whitelisted_methods = {
-	# "frappe.desk.doctype.event.event.get_events": "thirvusoft_bpm.event.get_events"
 	"erpnext.accounts.doctype.payment_request.payment_request.make_payment_request" : "thirvusoft_bpm.thirvusoft_bpm.custom.py.payment_request.custom_make_payment_request",
     "payments/payments/templates/pages/razorpay_checkout.py.make_payment":"thirvusoft_bpm/thirvusoft_bpm/thirvusoft_bpm/code_backup/razorpay_checkout.py.make_payment"
 }
