@@ -1,12 +1,14 @@
 import frappe
 import json
-from erpnext.accounts.doctype.payment_request.payment_request import make_payment_request
+from thirvusoft_bpm.thirvusoft_bpm.custom.py.payment_request import custom_make_payment_request
+# from erpnext.accounts.doctype.payment_request.payment_request import make_payment_request
 
 @frappe.whitelist()
 
 def trigger_bulk_message(list_of_docs):
     list_of_docs = json.loads(list_of_docs)
-    frappe.enqueue(create_payment_request, list_of_docs = list_of_docs)
+    # frappe.enqueue(create_payment_request, list_of_docs = list_of_docs)
+    create_payment_request(list_of_docs)
     frappe.msgprint("Payment Request Will Be Creating In Backgroud Within 20 Minutes.")
 
     
@@ -31,8 +33,9 @@ def create_payment_request(list_of_docs=None):
         for invoice in list_of_docs:
             invoice_doc = frappe.get_doc("Sales Invoice",invoice)
             if (invoice_doc.name and invoice_doc.student_email and invoice_doc.customer):
-                doc= frappe.new_doc("Payment Request")
-                doc.update(make_payment_request(dt="Sales Invoice",dn=invoice_doc.name,party_type= "Customer",party= invoice_doc.customer,recipient_id= invoice_doc.student_email))
+                # doc= frappe.get_doc("Payment Request")
+                pr_doc = custom_make_payment_request(dt="Sales Invoice",dn=invoice_doc.name,party_type= "Customer",party= invoice_doc.customer,recipient_id= invoice_doc.student_email)
+                doc = frappe.get_doc("Payment Request",pr_doc.name)
                 doc.mode_of_payment = 'Gateway'
                 doc.payment_request_type = 'Inward'
                 doc.print_format = frappe.db.get_value(
@@ -49,7 +52,7 @@ def create_payment_request(list_of_docs=None):
                 # doc.grand_total += previous_outstanding_amount
                 doc.grand_total = invoice_doc.outstanding_amount
                 # doc.grand_total = invoice_doc.outstanding_amount
-                doc.save()
+                doc.save(ignore_permissions = True)
                 frappe.db.set_value('Bulk Transaction Log Table',{'parent':update_dict[invoice],'parentfield': "bulk_transaction_log_table",'reference_doctype':'Sales Invoice','reference_name':invoice},'status','Completed')
                 name = frappe.get_doc('Bulk Transaction Log',new_transaction.name)
                 name.save()
