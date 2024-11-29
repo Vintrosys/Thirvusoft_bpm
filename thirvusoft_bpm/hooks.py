@@ -180,8 +180,7 @@ doc_events = {
 # ------------------------------
 #
 override_whitelisted_methods = {
-	"erpnext.accounts.doctype.payment_request.payment_request.make_payment_request" : "thirvusoft_bpm.thirvusoft_bpm.custom.py.payment_request.custom_make_payment_request",
-    "payments/payments/templates/pages/razorpay_checkout.py.make_payment":"thirvusoft_bpm/thirvusoft_bpm/thirvusoft_bpm/code_backup/razorpay_checkout.py.make_payment"
+	"erpnext.accounts.doctype.payment_request.payment_request.make_payment_request" : "thirvusoft_bpm.thirvusoft_bpm.custom.py.payment_request.custom_make_payment_request"
 }
 #
 # each overriding function accepts a `data` argument;

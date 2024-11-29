@@ -14,7 +14,6 @@ no_cache = 1
 
 expected_keys = (
 	"amount",
-	"title",
 	"description",
 	"reference_doctype",
 	"reference_docname",
@@ -79,23 +78,3 @@ def get_api_key(company=None):
 
 	return api_key
 
-
-@frappe.whitelist(allow_guest=True)
-def make_payment(razorpay_payment_id, options, reference_doctype, reference_docname, token):
-	data = {}
-
-	if isinstance(options, string_types):
-		data = json.loads(options)
-
-	data.update(
-		{
-			"razorpay_payment_id": razorpay_payment_id,
-			"reference_docname": reference_docname,
-			"reference_doctype": reference_doctype,
-			"token": token,
-		}
-	)
-
-	data = frappe.get_doc("Razorpay Settings").create_request(data)
-	frappe.db.commit()
-	return data
