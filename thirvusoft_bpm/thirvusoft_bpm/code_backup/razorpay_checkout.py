@@ -14,17 +14,17 @@ no_cache = 1
 
 expected_keys = (
 	"amount",
+	"title",
 	"description",
 	"reference_doctype",
 	"reference_docname",
 	"payer_name",
 	"payer_email",
 	"order_id",
-	"currency"
 )
 
 
-def gets_context(context):
+def get_context(context):
 	context.no_cache = 1
 	# Start
 	try:
@@ -32,10 +32,9 @@ def gets_context(context):
 		details = json.loads(doc.data)
 		if(details['reference_doctype']=="Payment Request"):
 			pay_doc = frappe.db.get_value('Payment Request',details['reference_docname'],'reference_doctype')
-			if pay_doc in ["Sales Invoice", "Fees"]:
+			if pay_doc == "Fees":
 				fee_doc = frappe.db.get_value('Payment Request',details['reference_docname'],'reference_name')
-				company = frappe.db.get_value(pay_doc,fee_doc,'company')
-
+				company = frappe.db.get_value('Fees',fee_doc,'company')
 		if company:
 			context.api_key = get_api_key(company)
 	except:
@@ -78,3 +77,23 @@ def get_api_key(company=None):
 
 	return api_key
 
+
+@frappe.whitelist(allow_guest=True)
+def make_payment(razorpay_payment_id, options, reference_doctype, reference_docname, token):
+	data = {}
+
+	if isinstance(options, string_types):
+		data = json.loads(options)
+
+	data.update(
+		{
+			"razorpay_payment_id": razorpay_payment_id,
+			"reference_docname": reference_docname,
+			"reference_doctype": reference_doctype,
+			"token": token,
+		}
+	)
+
+	data = frappe.get_doc("Razorpay Settings").create_request(data)
+	frappe.db.commit()
+	return data
