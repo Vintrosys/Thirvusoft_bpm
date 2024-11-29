@@ -261,7 +261,32 @@ def whatsapp_message(doc):
                     log_doc.insert()
                 frappe.delete_doc('File',pdf_url.name,ignore_permissions=True)
 
+def custom_get_amount(ref_doc, payment_account=None):
+    """get amount based on doctype"""
+    dt = ref_doc.doctype
+    if dt in ["Sales Order", "Purchase Order"]:
+        grand_total = flt(ref_doc.rounded_total) or flt(ref_doc.grand_total)
+    elif dt in ["Purchase Invoice"]:
+        if not ref_doc.get("is_pos"):
+            if ref_doc.party_account_currency == ref_doc.currency:
+                grand_total = flt(ref_doc.grand_total)
+            else:
+                grand_total = flt(ref_doc.base_grand_total) / ref_doc.conversion_rate
+        elif dt == "POS Invoice":
+            for pay in ref_doc.payments:
+                if pay.type == "Phone" and pay.account == payment_account:
+                    grand_total = pay.amount
+                    break
+    elif dt == "Fees":
+        grand_total = ref_doc.outstanding_amount
 
+    elif dt == "Sales Invoice":
+        grand_total = ref_doc.outstanding_amount
+
+    if grand_total > 0:
+        return grand_total
+    else:
+        frappe.throw(_("Payment Entry is already created"))
 
 @frappe.whitelist(allow_guest=True)
 def custom_make_payment_request(**args):
@@ -272,7 +297,8 @@ def custom_make_payment_request(**args):
     ref_doc = frappe.get_doc(args.dt, args.dn)
     gateway_account = get_gateway_details(args) or frappe._dict()
 
-    grand_total = get_amount(ref_doc, gateway_account.get("payment_account"))
+    grand_total = custom_get_amount(ref_doc, gateway_account.get("payment_account"))
+
     if args.loyalty_points and args.dt == "Sales Order":
         from erpnext.accounts.doctype.loyalty_program.loyalty_program import validate_loyalty_points
 
