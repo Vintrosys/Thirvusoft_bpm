@@ -9,8 +9,9 @@ from frappe.utils.file_manager import save_file
 from frappe.utils.pdf import get_pdf
 from frappe.utils.background_jobs import enqueue
 from erpnext.accounts.doctype.payment_entry.payment_entry import PaymentEntry
+from hrms.overrides.employee_payment_entry import EmployeePaymentEntry
 
-class CustomPayment(PaymentEntry):
+class CustomPayment(EmployeePaymentEntry):
     def validate_transaction_reference(self):
         bank_account = self.paid_to if self.payment_type == "Receive" else self.paid_from
         bank_account_type = frappe.db.get_value("Account", bank_account, "account_type")

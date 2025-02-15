@@ -1,0 +1,21 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "After Save",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2025-02-15 19:47:04.411129",
+  "module": "Thirvusoft Bpm",
+  "name": "Payment Entry Automation",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "Integration Request",
+  "script": "\n\nif doc.status == \"Completed\" and doc.reference_doctype == \"Payment Request\":\n    payment_request = frappe.get_doc(\"Payment Request\", doc.reference_docname)\n\n    # Fetch company abbreviation\n    company_abbr = frappe.db.get_value(\"Company\", payment_request.company, \"abbr\")\n\n    # Fetch dynamic paid amount from Payment Request\n    paid_amount = payment_request.grand_total\n\n    # Retrieve linked Sales Invoice\n    sales_invoice = frappe.db.get_value(\n        \"Sales Invoice\",\n        {\"name\": payment_request.reference_name},\n        [\"name\", \"total\", \"outstanding_amount\"],\n        as_dict=True\n    )\n\n    if not sales_invoice:\n        frappe.throw(f\"Sales Invoice not found for Payment Request {payment_request.name}\")\n\n    # Ensure allocated amount does not exceed outstanding amount\n    allocated_amount = min(paid_amount, sales_invoice[\"outstanding_amount\"])\n\n    # Calculate unallocated amount if paid_amount is greater than outstanding_amount\n    unallocated_amount = max(0, paid_amount - sales_invoice[\"outstanding_amount\"])\n\n    # Fetch and extract Razorpay Payment ID from JSON field in Integration Request\n    integration_request_data = frappe.db.get_value(\"Integration Request\", doc.name, \"data\")\n\n    razorpay_payment_id = None\n    if integration_request_data:\n        try:\n            data_json = json.loads(integration_request_data)  # Load JSON\n            razorpay_payment_id = data_json.get(\"razorpay_payment_id\")  # Extract value\n        except json.JSONDecodeError:\n            frappe.throw(\"Error decoding JSON data in Integration Request.\")\n\n    if not razorpay_payment_id:\n        frappe.throw(\"Razorpay Payment ID is missing in the Integration Request JSON data.\")\n\n    # Create Payment Entry\n    payment_entry = frappe.new_doc(\"Payment Entry\")\n    payment_entry.naming_series = f\"PV-{company_abbr}-BP-\"  # Set custom naming series\n    payment_entry.payment_type = \"Receive\"\n    payment_entry.company = payment_request.company\n    payment_entry.party_type = payment_request.party_type\n    payment_entry.party = payment_request.party\n    payment_entry.party_name = doc.payer_name  # Use Integration Request's payer_name\n    payment_entry.mode_of_payment = payment_request.mode_of_payment\n    payment_entry.paid_amount = paid_amount\n    payment_entry.received_amount = paid_amount\n    payment_entry.paid_to = payment_request.payment_account\n\n    # Set the correct Razorpay Payment ID in Reference No\n    payment_entry.reference_no = razorpay_payment_id\n    payment_entry.reference_date = frappe.utils.nowdate()\n    payment_entry.remarks = doc.description  # Use description from Integration Request\n\n    # Add Reference in Payment Entry (Child Table) with Sales Invoice Details\n    payment_entry.append(\"references\", {\n        \"reference_doctype\": \"Sales Invoice\",\n        \"reference_name\": sales_invoice[\"name\"],\n        \"total_amount\": sales_invoice[\"total\"],\n        \"outstanding_amount\": sales_invoice[\"outstanding_amount\"],\n        \"allocated_amount\": allocated_amount  # Ensure allocated amount is correct\n    })\n\n    # Set Unallocated Amount\n    payment_entry.unallocated_amount = unallocated_amount\n\n    # Save Payment Entry as Draft (Do not submit)\n    payment_entry.insert()\n\n    frappe.msgprint(f\"Draft Payment Entry {payment_entry.name} created for Sales Invoice {sales_invoice['name']} with allocated amount of {allocated_amount} and unallocated amount of {unallocated_amount}. Reference No: {razorpay_payment_id}\")\n",
+  "script_type": "DocType Event"
+ }
+]

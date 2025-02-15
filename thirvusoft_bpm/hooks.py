@@ -228,3 +228,9 @@ user_data_fields = [
 #	"thirvusoft_bpm.auth.validate"
 # ]
 
+fixtures = [
+    {
+        "doctype": "Server Script",
+        "filters": [["name", "=", "Payment Entry Automation"]]  # Export only this script
+    }
+]
