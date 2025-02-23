@@ -53,5 +53,70 @@ frappe.listview_settings['Sales Invoice'] = {
             }
         )
         })
+		list_view.page.add_actions_menu_item(__("Set Advance"), function() {
+            const selected_docs = list_view.get_checked_items();
+            const list_of_docs = list_view.get_checked_items(true);
+            for (let doc of selected_docs) {
+                if (doc.docstatus != 0) {
+                    frappe.throw(__("We can set Advance only for Draft Sales Invoice."));
+                }
+				if (selected_docs[0].company != doc.company){
+					frappe.throw(__("Selected Sales Invoice much be in Same Company."));
+				}
+            }
+			var data = [
+				{
+					"account": selected_docs[0].debit_to
+				}
+			]
+			const dialog = new frappe.ui.Dialog({
+				title: __("Select Multi-Advance Account"),
+				fields: [
+					{
+						fieldname: "advance_account",
+						fieldtype: "Table",
+						label: __("Select Advance Account"),
+						data: data,
+						get_data: () => {
+							return data;
+						},
+						fields: [
+							{
+								fieldtype: "Link",
+								fieldname: "account",
+								options: "Account",
+								in_list_view: 1,
+								label: "Account",
+								get_query: () => {
+									return {
+										filters: {
+											company: selected_docs[0].company,
+											account_type: "Receivable",
+											is_group: 0,
+										},
+									};
+								},
+							},
+						],
+					}	
+				],
+				primary_action: () => {
+					const args = dialog.get_values()["advance_account"];
+					frappe.call({
+						method:"thirvusoft_bpm.thirvusoft_bpm.custom.py.sales_invoice.update_advance",
+						args:{
+							"list_of_docs": list_of_docs,
+							"accounts": args
+						},
+						callback:function(frm){
+							frappe.show_alert({message:__('Advance Updated Successfully'), indicator:'green'});
+						}
+					})
+					dialog.hide();
+				},
+				primary_action_label: __("Update {0} records", [list_of_docs.length]),
+			});
+			dialog.show();
+        })
     }
 }

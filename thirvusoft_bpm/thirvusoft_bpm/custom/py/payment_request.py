@@ -281,7 +281,8 @@ def custom_get_amount(ref_doc, payment_account=None):
         grand_total = ref_doc.outstanding_amount
 
     elif dt == "Sales Invoice":
-        grand_total = ref_doc.outstanding_amount
+        # grand_total = ref_doc.outstanding_amount
+        return ref_doc.custom_net_payable
 
     if grand_total > 0:
         return grand_total
