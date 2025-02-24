@@ -143,8 +143,10 @@ doc_events = {
 	 	"validate": ["thirvusoft_bpm.thirvusoft_bpm.custom.py.student.validate_wapp_enable" 
                 ]
 	},
-    
-
+    "Sales Invoice": {
+        "after_insert": "thirvusoft_bpm.thirvusoft_bpm.custom.py.sales_invoice.after_insert",
+        "validate": "thirvusoft_bpm.thirvusoft_bpm.custom.py.sales_invoice.validate",
+	},
     "Integration Request": {
 		"validate": "thirvusoft_bpm.thirvusoft_bpm.custom.py.integration_request.update_expiry_date",
 
