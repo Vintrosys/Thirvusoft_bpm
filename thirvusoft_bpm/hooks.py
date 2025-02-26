@@ -129,7 +129,7 @@ doc_events = {
 
 	},
     "Payment Entry": {
-		"on_submit": "thirvusoft_bpm.thirvusoft_bpm.custom.py.payment_entry.send_message_confirmation",
+		"on_submit": "thirvusoft_bpm.thirvusoft_bpm.custom.py.payment_entry.on_submit",
 		"validate":"thirvusoft_bpm.thirvusoft_bpm.custom.py.payment_entry.update_letter_head"
 
 	},
