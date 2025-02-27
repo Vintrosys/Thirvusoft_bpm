@@ -23,6 +23,11 @@ class CustomPayment(EmployeePaymentEntry):
 def update_letter_head(doc,event):
     doc.letter_head = frappe.get_value('Payment Letter Head',{'parent':doc.company,'party_type':doc.party_type},'letter_head')
     
+
+def on_submit(doc, method=None):
+    send_payment_mail(doc)
+    send_message_confirmation(doc,method)
+
 @frappe.whitelist()
 def send_message_confirmation(doc,event):
     for ref in doc.references:
@@ -216,3 +221,28 @@ def send_purchase_msg(doc):
                     log_doc.reference_name = doc.name
                     log_doc.insert()
                 frappe.delete_doc('File',pdf_url.name,ignore_permissions=True)
+
+
+def send_payment_mail(doc, method=None):
+    if not frappe.db.exists("Customer", doc.party):
+        return
+    
+    email_id = frappe.get_value("Customer", doc.party, "email_id")
+    get_company = frappe.get_doc("Company", doc.company)
+    email_args = {
+        "recipients": email_id,
+        "sender": None,
+        "subject": get_company.custom_after_payment_sucess_subject,
+        "message": get_company.custom_after_payment_sucess_message,
+        "now": True,
+        "attachments": [
+            frappe.attach_print(
+                doc.doctype,
+                doc.name,
+                doc=doc,
+                print_format=get_company.custom_payment_print_format or doc.meta.default_print_format or "Standard",
+                letterhead=doc.letter_head or None
+            )
+        ],
+    }
+    enqueue(method=frappe.sendmail, queue="short", timeout=300, is_async=True, **email_args)
