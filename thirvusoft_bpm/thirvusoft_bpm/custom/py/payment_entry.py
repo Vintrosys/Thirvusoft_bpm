@@ -223,14 +223,42 @@ def send_purchase_msg(doc):
                 frappe.delete_doc('File',pdf_url.name,ignore_permissions=True)
 
 
+import frappe
+from frappe.utils.background_jobs import enqueue
+
 def send_payment_mail(doc, method=None):
-    if not frappe.db.exists("Customer", doc.party):
+    if not frappe.db.exists("Student", doc.party):
         return
     
-    email_id = frappe.get_value("Customer", doc.party, "email_id")
+    # Fetch Student Email
+    student_email = frappe.get_value("Student", doc.party, "student_email_id")
+
+    # Fetch Guardian Emails
+    guardian_emails = frappe.db.sql("""
+        SELECT g.email_address as guardian_email 
+        FROM `tabStudent Guardian` sg
+        JOIN `tabGuardian` g ON sg.guardian = g.name
+        WHERE sg.parent = %s
+        GROUP BY g.name
+    """, (doc.party,), as_dict=True)
+
+    guardian_email_list = [entry["guardian_email"] for entry in guardian_emails if entry["guardian_email"]]
+
+    # Prepare email recipients (Student + Guardians)
+    recipients = []
+    if student_email:
+        recipients.append(student_email)
+    if guardian_email_list:
+        recipients.extend(guardian_email_list)
+
+    if not recipients:
+        return  # Exit if no valid emails found
+
+    # Get Company Details
     get_company = frappe.get_doc("Company", doc.company)
+
     email_args = {
-        "recipients": email_id,
+        "recipients": recipients,
         "sender": None,
         "subject": get_company.custom_after_payment_sucess_subject,
         "message": get_company.custom_after_payment_sucess_message,
@@ -245,4 +273,6 @@ def send_payment_mail(doc, method=None):
             )
         ],
     }
+
+    # Enqueue email sending
     enqueue(method=frappe.sendmail, queue="short", timeout=300, is_async=True, **email_args)
