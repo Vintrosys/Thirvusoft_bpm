@@ -144,7 +144,7 @@ doc_events = {
                 ]
 	},
     "Sales Invoice": {
-        "after_insert": "thirvusoft_bpm.thirvusoft_bpm.custom.py.sales_invoice.after_insert",
+        # "after_insert": "thirvusoft_bpm.thirvusoft_bpm.custom.py.sales_invoice.after_insert",
         "validate": "thirvusoft_bpm.thirvusoft_bpm.custom.py.sales_invoice.validate",
 	},
     "Integration Request": {
