@@ -91,7 +91,6 @@ frappe.listview_settings['Sales Invoice'] = {
 									return {
 										filters: {
 											company: selected_docs[0].company,
-											account_type: "Receivable",
 											is_group: 0,
 										},
 									};

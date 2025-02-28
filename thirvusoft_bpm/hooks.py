@@ -236,3 +236,7 @@ fixtures = [
         "filters": [["name", "=", "Payment Entry Automation"]]  # Export only this script
     }
 ]
+
+app_include_js = [
+    "/assets/thirvusoft_bpm/js/razorpay_checkout.js"
+]

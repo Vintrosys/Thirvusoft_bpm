@@ -1,0 +1,5 @@
+{
+    "thirvusoft_bpm": {
+        "js/razorpay_checkout.js": "public/js/razorpay_checkout.js"
+    }
+}
